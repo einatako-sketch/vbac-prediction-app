@@ -119,7 +119,6 @@ if derive_auto:
         "Number of prior cesarean deliveries"
     )
     antenatal_map["prev_vaginal_cs"] = "DERIVED"
-    st.session_state["parity_col_deriv"] = parity_col_deriv
     st.session_state["cs_count_col"] = cs_count_col
 else:
     antenatal_map["prev_vaginal_cs"] = col_select(
