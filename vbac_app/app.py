@@ -73,9 +73,9 @@ with col2:
 
     ### Reference Paper
 
-    Tako E, Gilboa I, Gabbai D, et al.
+    Tako E, Attali E, et al.
     *Machine Learning for VBAC Prediction.*
-    Am J Obstet Gynecol, 2025 (submitted).
+    PAPER 2026 (submitted).
 
     ---
 
