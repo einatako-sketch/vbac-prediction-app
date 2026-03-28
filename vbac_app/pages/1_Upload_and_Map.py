@@ -101,19 +101,25 @@ st.markdown("#### Derived Variable: Prior Vaginal Delivery Before Index CS")
 st.markdown("""
 This variable is calculated as: **Parity − Prior CS count − Prior VBACs**.
 You can either:
-- Let us calculate it automatically (if you mapped parity, CS count, and prior VBACs above), or
+- Let us calculate it automatically (requires parity, CS count, and prior VBACs columns), or
 - Map a pre-existing column directly.
 """)
 
 derive_auto = st.checkbox("Calculate automatically from parity, CS count, and prior VBACs", value=True)
 
 if derive_auto:
+    parity_col_deriv = col_select(
+        "Parity column (total number of deliveries)",
+        "parity_col_deriv",
+        "Total number of prior deliveries (including cesareans and vaginal)"
+    )
     cs_count_col = col_select(
         "Prior CS count column (for derivation)",
         "cs_count_col",
         "Number of prior cesarean deliveries"
     )
     antenatal_map["prev_vaginal_cs"] = "DERIVED"
+    st.session_state["parity_col_deriv"] = parity_col_deriv
     st.session_state["cs_count_col"] = cs_count_col
 else:
     antenatal_map["prev_vaginal_cs"] = col_select(
@@ -194,7 +200,7 @@ if st.button("Apply Mapping & Process Dataset", type="primary"):
     for var, meta in ANTENATAL_VARS.items():
         if var == "prev_vaginal_cs":
             if antenatal_map.get("prev_vaginal_cs") == "DERIVED":
-                parity_col = antenatal_map.get("parity", "-- not available --")
+                parity_col = st.session_state.get("parity_col_deriv", "-- not available --")
                 cs_col = st.session_state.get("cs_count_col", "-- not available --")
                 vbac_col_mapped = antenatal_map.get("prev_vbac", "-- not available --")
 
