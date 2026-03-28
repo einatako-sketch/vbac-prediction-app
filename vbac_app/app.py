@@ -66,8 +66,8 @@ with col2:
     | VBAC success | 88.5% |
     | Repeat CS | 11.5% |
     | Study period | 2015–2024 |
-    | Antenatal features | 15 |
-    | Intrapartum features | 5 |
+    | Antenatal features | 12 |
+    | Intrapartum features | 7 |
 
     ---
 
