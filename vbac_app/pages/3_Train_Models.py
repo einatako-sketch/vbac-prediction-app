@@ -46,7 +46,7 @@ st.markdown("---")
 # ── Model selection ────────────────────────────────────────────────────────────
 st.subheader("Models to Train")
 
-train_A = st.checkbox("Model A — Antenatal only (15 features)", value=True)
+train_A = st.checkbox("Model A — Antenatal only (13 features)", value=True)
 train_B = st.checkbox("Model B — Antenatal + Intrapartum (20 features)", value=True)
 
 ant_features = list(ANTENATAL_VARS.keys())
