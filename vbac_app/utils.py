@@ -18,7 +18,6 @@ warnings.filterwarnings('ignore')
 ANTENATAL_VARS = {
     "age":              {"label": "Maternal age (years)",                      "type": "numeric"},
     "bmi":              {"label": "BMI (kg/m²)",                               "type": "numeric"},
-    "parity":           {"label": "Parity",                                    "type": "numeric"},
     "prev_vbac":        {"label": "Number of prior VBACs",                     "type": "numeric"},
     "cs_indication":    {"label": "Indication for prior CD (1-4)",             "type": "categorical"},
     "interval_years":   {"label": "Interpregnancy interval (years)",           "type": "numeric"},
