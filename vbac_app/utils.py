@@ -16,29 +16,29 @@ warnings.filterwarnings('ignore')
 
 # Standard variable names used throughout the app
 ANTENATAL_VARS = {
-    "age":              {"label": "Maternal age (years)",                     "type": "numeric"},
-    "bmi":              {"label": "BMI (kg/m²)",                              "type": "numeric"},
-    "gravida":          {"label": "Gravidity",                                "type": "numeric"},
-    "parity":           {"label": "Parity",                                   "type": "numeric"},
-    "prev_vbac":        {"label": "Number of prior VBACs",                    "type": "numeric"},
-    "cs_indication":    {"label": "Indication for prior CD (1-4)",            "type": "categorical"},
-    "interval_years":   {"label": "Interpregnancy interval (years)",          "type": "numeric"},
-    "gestational_week": {"label": "Gestational age at delivery (weeks)",      "type": "numeric"},
-    "gwg":              {"label": "Gestational weight gain (kg)",             "type": "numeric"},
-    "gdm":              {"label": "GDM (0=No, 1=Yes)",                       "type": "binary"},
-    "pet":              {"label": "Preeclampsia/HDP (0=No, 1=Yes)",          "type": "binary"},
-    "iugr":             {"label": "IUGR (0=No, 1=Yes)",                      "type": "binary"},
-    "macrosomia":       {"label": "Macrosomia (0=No, 1=Yes)",                "type": "binary"},
+    "age":              {"label": "Maternal age (years)",                      "type": "numeric"},
+    "bmi":              {"label": "BMI (kg/m²)",                               "type": "numeric"},
+    "parity":           {"label": "Parity",                                    "type": "numeric"},
+    "prev_vbac":        {"label": "Number of prior VBACs",                     "type": "numeric"},
+    "cs_indication":    {"label": "Indication for prior CD (1-4)",             "type": "categorical"},
+    "interval_years":   {"label": "Interpregnancy interval (years)",           "type": "numeric"},
+    "gestational_week": {"label": "Gestational age at delivery (weeks)",       "type": "numeric"},
+    "gdm":              {"label": "GDM (0=No, 1=Yes)",                        "type": "binary"},
+    "pet":              {"label": "Preeclampsia/HDP (0=No, 1=Yes)",           "type": "binary"},
+    "iugr":             {"label": "IUGR (0=No, 1=Yes)",                       "type": "binary"},
+    "macrosomia":       {"label": "Macrosomia (0=No, 1=Yes)",                 "type": "binary"},
     "start_mode":       {"label": "Labor onset (1=Spontaneous, 3=Induction, 4=Augmentation)", "type": "categorical"},
-    "prev_vaginal_cs":  {"label": "Prior vaginal delivery before index CD",   "type": "numeric"},
+    "prev_vaginal_cs":  {"label": "Prior vaginal delivery before index CD",    "type": "numeric"},
 }
 
 INTRAPARTUM_VARS = {
-    "dilation_admission": {"label": "Cervical dilation on admission (cm)",    "type": "numeric"},
-    "epidural":           {"label": "Epidural analgesia (0=No, 1=Yes)",       "type": "binary"},
-    "oxytocin":           {"label": "Oxytocin use (0=No, 1=Yes)",             "type": "binary"},
-    "max_temp":           {"label": "Maximum intrapartum temperature (°C)",   "type": "numeric"},
-    "prolonged_2nd":      {"label": "Prolonged second stage (0=No, 1=Yes)",   "type": "binary"},
+    "dilation_admission": {"label": "Cervical dilation on admission (cm)",     "type": "numeric"},
+    "epidural":           {"label": "Epidural analgesia (0=No, 1=Yes)",        "type": "binary"},
+    "oxytocin":           {"label": "Oxytocin use (0=No, 1=Yes)",              "type": "binary"},
+    "max_temp":           {"label": "Maximum intrapartum temperature (°C)",    "type": "numeric"},
+    "prolonged_2nd":      {"label": "Prolonged second stage (0=No, 1=Yes)",    "type": "binary"},
+    "prom":               {"label": "PROM (0=No, 1=Yes)",                      "type": "binary"},
+    "meconium":           {"label": "Meconium-stained fluid (0=No, 1=Yes)",    "type": "binary"},
 }
 
 CS_INDICATION_LABELS = {
@@ -147,14 +147,13 @@ def compute_grobman(df_ant, y):
     """
     from sklearn.metrics import roc_auc_score
 
-    # Grobman coefficients (intercept + published betas, excluding race)
     intercept = -1.5378
     coefs = {
         "age":           -0.0313,
         "bmi":           -0.0526,
         "prev_vbac":      0.9021,
         "prev_vaginal_cs": 0.7676,
-        "cs_indication":  0.0,    # not directly in Grobman; omitted
+        "cs_indication":  0.0,
     }
 
     logit = intercept
@@ -162,7 +161,6 @@ def compute_grobman(df_ant, y):
         if var in df_ant.columns:
             col = df_ant[var].fillna(df_ant[var].median())
             logit = logit + beta * col
-        # if column missing, skip
 
     prob = 1 / (1 + np.exp(-logit))
     valid = ~prob.isna()
