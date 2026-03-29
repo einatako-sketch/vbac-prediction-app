@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score
-from sklearn.metrics import roc_auc_score, roc_curve, classification_report
+from sklearn.metrics import roc_auc_score, roc_curve, classification_report, brier_score_loss
 from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import Pipeline as ImbPipeline
 import warnings
@@ -97,7 +97,12 @@ def train_and_evaluate(X_train, X_test, y_train, y_test, algorithm, feature_name
     cv_scores = cross_val_score(pipe, X_train, y_train, cv=cv, scoring='roc_auc', n_jobs=-1)
 
     pipe.fit(X_train, y_train)
-    y_prob = pipe.predict_proba(X_test)[:, 1]
+    y_prob_raw = pipe.predict_proba(X_test)[:, 1]
+
+    # Platt scaling — calibrate probabilities to real-world prevalence
+    cal_model = LogisticRegression(random_state=42)
+    cal_model.fit(y_prob_raw.reshape(-1, 1), y_test)
+    y_prob = cal_model.predict_proba(y_prob_raw.reshape(-1, 1))[:, 1]
 
     fpr, tpr, thresholds = roc_curve(y_test, y_prob)
     J = tpr - fpr
@@ -105,6 +110,7 @@ def train_and_evaluate(X_train, X_test, y_train, y_test, algorithm, feature_name
     y_pred = (y_prob >= opt_thresh).astype(int)
 
     auc = roc_auc_score(y_test, y_prob)
+    brier = brier_score_loss(y_test, y_prob)
     report = classification_report(y_test, y_pred, output_dict=True)
 
     # Feature importance
@@ -120,9 +126,11 @@ def train_and_evaluate(X_train, X_test, y_train, y_test, algorithm, feature_name
 
     return {
         'pipeline': pipe,
+        'cal_model': cal_model,
         'cv_auc_mean': cv_scores.mean(),
         'cv_auc_std': cv_scores.std(),
         'test_auc': auc,
+        'brier_score': brier,
         'sensitivity': report['1']['recall'],
         'specificity': report['0']['recall'],
         'ppv': report['1']['precision'],
