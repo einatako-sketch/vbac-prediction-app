@@ -128,12 +128,16 @@ if st.button("Calculate VBAC Probability", type="primary"):
         else st.session_state.get("ant_features", list(ANTENATAL_VARS.keys()))
     )
 
-    # Build input row with only the features the model was trained on
     input_row = {f: patient_data.get(f, np.nan) for f in feature_list}
     X_input = pd.DataFrame([input_row])
 
     pipe = results[selected_model]["pipeline"]
-    prob = pipe.predict_proba(X_input)[0, 1]
+    cal_model = results[selected_model].get("cal_model")
+    raw_prob = pipe.predict_proba(X_input)[0, 1]
+    if cal_model is not None:
+        prob = cal_model.predict_proba(np.array([[raw_prob]]))[0, 1]
+    else:
+        prob = raw_prob
     prediction = "VBAC Success" if prob >= opt_thresh else "Repeat CS"
 
     # Display result
@@ -148,24 +152,17 @@ if st.button("Calculate VBAC Probability", type="primary"):
     # Visual gauge
     fig, ax = plt.subplots(figsize=(8, 2.5))
     cmap = plt.get_cmap("RdYlGn")
-
-    # Background gradient
     gradient = np.linspace(0, 1, 300).reshape(1, -1)
     ax.imshow(gradient, aspect="auto", cmap=cmap, extent=[0, 1, 0, 1])
-
-    # Threshold line
     ax.axvline(opt_thresh, color="navy", lw=3, linestyle="--", label=f"Threshold ({opt_thresh:.2f})")
-
-    # Patient probability marker
     color = "#155724" if prob >= opt_thresh else "#721c24"
     ax.axvline(prob, color=color, lw=4, label=f"Patient ({prob:.2f})")
     ax.text(prob, 0.5, f"  {prob:.1%}", va="center", ha="left" if prob < 0.8 else "right",
             fontsize=14, fontweight="bold", color=color)
-
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.set_yticks([])
-    ax.set_xlabel("VBAC Probability", fontsize=12)
+    ax.set_xlabel("VBAC Probability (calibrated)", fontsize=12)
     ax.legend(loc="upper left", fontsize=9)
     ax.set_title("VBAC Probability Gauge", fontsize=12, fontweight="bold")
     plt.tight_layout()
@@ -203,10 +200,9 @@ if st.button("Calculate VBAC Probability", type="primary"):
     else:
         st.error(f"**{risk_level} VBAC probability.** {message}")
 
-    # Input summary
     with st.expander("View entered patient data"):
         input_summary = {all_vars.get(k, {}).get("label", k): v for k, v in input_row.items()}
         st.dataframe(pd.DataFrame.from_dict(input_summary, orient="index", columns=["Value"]))
 
     st.markdown("---")
-    st.caption("This prediction is based on a machine learning model trained on your institution's data. Results should be interpreted by qualified clinicians in the context of the full clinical picture.")
+    st.caption("This prediction is based on a machine learning model trained on your institution's data. Probabilities are calibrated using Platt scaling. Results should be interpreted by qualified clinicians in the context of the full clinical picture.")
