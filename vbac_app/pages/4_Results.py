@@ -39,6 +39,7 @@ for key, res in results.items():
         "Specificity": round(res["specificity"], 3),
         "PPV": round(res["ppv"], 3),
         "NPV": round(res["npv"], 3),
+        "Brier Score": round(res.get("brier_score", float("nan")), 3),
         "Threshold": round(res["opt_thresh"], 3),
     })
 
@@ -57,7 +58,6 @@ st.markdown("---")
 # ── ROC Curves ────────────────────────────────────────────────────────────────
 st.subheader("ROC Curves")
 
-# Separate Model A and Model B
 model_A_keys = [k for k in results if k.startswith("A_")]
 model_B_keys = [k for k in results if k.startswith("B_")]
 
@@ -117,8 +117,8 @@ if imp_keys:
     labels = [all_vars.get(f, {}).get("label", f)[:35] for f in imp.index]
 
     fig, ax = plt.subplots(figsize=(8, max(4, len(imp) * 0.4)))
-    bars = ax.barh(labels, imp.values,
-                   color=["#e74c3c" if v == imp.max() else "#3498db" for v in imp.values])
+    ax.barh(labels, imp.values,
+            color=["#e74c3c" if v == imp.max() else "#3498db" for v in imp.values])
     ax.set_xlabel("Importance" if "feature_importances_" in str(type(imp)) else "Coefficient |value|")
     ax.set_title(f"Feature Importance — {selected_key.replace('_', ' — Model ', 1)}", fontweight="bold")
     ax.spines[["top", "right"]].set_visible(False)
@@ -141,18 +141,16 @@ calib_key = st.selectbox(
 
 y_prob = results[calib_key]["y_prob"]
 
-# Bin predictions
 n_bins = 10
 bins = np.linspace(0, 1, n_bins + 1)
-bin_centers = (bins[:-1] + bins[1:]) / 2
 fraction_pos = []
 mean_pred = []
 
 for i in range(n_bins):
     mask = (y_prob >= bins[i]) & (y_prob < bins[i + 1])
     if mask.sum() > 0:
-        fraction_pos.append(y_test.values[mask].mean())
-        mean_pred.append(y_prob[mask].mean())
+        fraction_pos.append(float(pd.to_numeric(y_test.values[mask], errors='coerce').mean()))
+        mean_pred.append(float(y_prob[mask].mean()))
 
 fig, ax = plt.subplots(figsize=(6, 6))
 ax.plot([0, 1], [0, 1], "k--", lw=1, label="Perfect calibration")
@@ -160,7 +158,7 @@ ax.plot(mean_pred, fraction_pos, "o-", color="#e67e22", lw=2, markersize=7,
         label=f"Model {calib_key.split('_', 1)[0]} — {calib_key.split('_', 1)[1]}")
 ax.set_xlabel("Mean predicted probability")
 ax.set_ylabel("Fraction of VBAC successes")
-ax.set_title("Calibration Plot", fontweight="bold")
+ax.set_title("Calibration Plot (after Platt scaling)", fontweight="bold")
 ax.legend()
 ax.set_xlim([0, 1])
 ax.set_ylim([0, 1])
@@ -182,6 +180,7 @@ if st.button("Generate Summary Report (CSV)"):
             "CV_AUC_mean": res["cv_auc_mean"],
             "CV_AUC_SD": res["cv_auc_std"],
             "Test_AUC": res["test_auc"],
+            "Brier_Score": res.get("brier_score", ""),
             "Sensitivity": res["sensitivity"],
             "Specificity": res["specificity"],
             "PPV": res["ppv"],
