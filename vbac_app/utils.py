@@ -110,9 +110,11 @@ def train_and_evaluate(X_train, X_test, y_train, y_test, algorithm, feature_name
     # Feature importance
     clf = pipe.named_steps['clf']
     if hasattr(clf, 'feature_importances_'):
-        importance = pd.Series(clf.feature_importances_, index=feature_names)
+        coef = clf.feature_importances_
+        importance = pd.Series(coef, index=feature_names) if len(coef) == len(feature_names) else None
     elif hasattr(clf, 'coef_'):
-        importance = pd.Series(np.abs(clf.coef_[0]), index=feature_names)
+        coef = np.abs(clf.coef_[0])
+        importance = pd.Series(coef, index=feature_names) if len(coef) == len(feature_names) else None
     else:
         importance = None
 
