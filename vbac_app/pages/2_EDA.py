@@ -67,17 +67,21 @@ for var, meta in all_vars.items():
     cs_data = df_combined.loc[df_combined["outcome"] == 0, var].dropna()
 
     if meta["type"] in ["numeric"]:
+        vbac_num = pd.to_numeric(vbac_data, errors='coerce').dropna()
+        cs_num = pd.to_numeric(cs_data, errors='coerce').dropna()
         rows.append({
             "Variable": meta["label"],
-            f"VBAC (n={n_vbac:,})": f"{vbac_data.median():.1f} [{vbac_data.quantile(0.25):.1f}–{vbac_data.quantile(0.75):.1f}]",
-            f"Repeat CS (n={n_cs:,})": f"{cs_data.median():.1f} [{cs_data.quantile(0.25):.1f}–{cs_data.quantile(0.75):.1f}]",
+            f"VBAC (n={n_vbac:,})": f"{vbac_num.median():.1f} [{vbac_num.quantile(0.25):.1f}–{vbac_num.quantile(0.75):.1f}]" if len(vbac_num) > 0 else "N/A",
+            f"Repeat CS (n={n_cs:,})": f"{cs_num.median():.1f} [{cs_num.quantile(0.25):.1f}–{cs_num.quantile(0.75):.1f}]" if len(cs_num) > 0 else "N/A",
             "Type": "Median [IQR]"
         })
     elif meta["type"] in ["binary", "categorical"]:
         # Show most common value or yes %
         if meta["type"] == "binary":
-            v_pct = 100 * vbac_data.mean() if len(vbac_data) > 0 else np.nan
-            c_pct = 100 * cs_data.mean() if len(cs_data) > 0 else np.nan
+            vbac_num = pd.to_numeric(vbac_data, errors='coerce').dropna()
+            cs_num = pd.to_numeric(cs_data, errors='coerce').dropna()
+            v_pct = float(vbac_num.mean()) * 100 if len(vbac_num) > 0 else np.nan
+            c_pct = float(cs_num.mean()) * 100 if len(cs_num) > 0 else np.nan
             rows.append({
                 "Variable": meta["label"],
                 f"VBAC (n={n_vbac:,})": f"{v_pct:.1f}%" if not np.isnan(v_pct) else "N/A",
@@ -112,8 +116,8 @@ if numeric_vars:
     )
 
     fig, ax = plt.subplots(figsize=(7, 4))
-    vbac_vals = df_combined.loc[df_combined["outcome"] == 1, selected_var].dropna()
-    cs_vals = df_combined.loc[df_combined["outcome"] == 0, selected_var].dropna()
+    vbac_vals = pd.to_numeric(df_combined.loc[df_combined["outcome"] == 1, selected_var], errors='coerce').dropna()
+    cs_vals = pd.to_numeric(df_combined.loc[df_combined["outcome"] == 0, selected_var], errors='coerce').dropna()
 
     ax.hist(vbac_vals, bins=30, alpha=0.6, color="#2ecc71", label=f"VBAC (n={len(vbac_vals):,})", density=True)
     ax.hist(cs_vals, bins=30, alpha=0.6, color="#e74c3c", label=f"Repeat CS (n={len(cs_vals):,})", density=True)
@@ -131,7 +135,7 @@ st.subheader("Correlation Matrix (Antenatal Features)")
 numeric_ant_vars = [v for v, m in ANTENATAL_VARS.items() if v in df_ant.columns]
 
 if len(numeric_ant_vars) >= 2:
-    corr = df_ant[numeric_ant_vars].corr()
+    corr = df_ant[numeric_ant_vars].apply(pd.to_numeric, errors='coerce').corr()
     fig, ax = plt.subplots(figsize=(10, 8))
     mask = np.triu(np.ones_like(corr, dtype=bool))
     sns.heatmap(
