@@ -88,7 +88,6 @@ st.markdown("### Antenatal Variables (Model A + B)")
 antenatal_map = {}
 for var, meta in ANTENATAL_VARS.items():
     if var == "prev_vaginal_cs":
-        # This is derived — handle separately below
         continue
     antenatal_map[var] = col_select(
         f"{meta['label']}",
@@ -119,7 +118,6 @@ if derive_auto:
         "Number of prior cesarean deliveries"
     )
     antenatal_map["prev_vaginal_cs"] = "DERIVED"
-    st.session_state["cs_count_col"] = cs_count_col
 else:
     antenatal_map["prev_vaginal_cs"] = col_select(
         "Prior vaginal delivery before index CS (direct column)",
