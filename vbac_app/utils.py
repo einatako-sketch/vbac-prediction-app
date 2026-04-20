@@ -24,8 +24,6 @@ ANTENATAL_VARS = {
     "gestational_week": {"label": "Gestational age at delivery (weeks)",       "type": "numeric"},
     "gdm":              {"label": "GDM (0=No, 1=Yes)",                        "type": "binary"},
     "pet":              {"label": "Preeclampsia/HDP (0=No, 1=Yes)",           "type": "binary"},
-    "iugr":             {"label": "IUGR (0=No, 1=Yes)",                       "type": "binary"},
-    "macrosomia":       {"label": "Macrosomia (0=No, 1=Yes)",                 "type": "binary"},
     "start_mode":       {"label": "Labor onset (1=Spontaneous, 3=Induction, 4=Augmentation)", "type": "categorical"},
     "prev_vaginal_cs":  {"label": "Prior vaginal delivery before index CD",    "type": "numeric"},
 }
