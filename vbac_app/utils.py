@@ -33,7 +33,6 @@ INTRAPARTUM_VARS = {
     "epidural":           {"label": "Epidural analgesia (0=No, 1=Yes)",        "type": "binary"},
     "oxytocin":           {"label": "Oxytocin use (0=No, 1=Yes)",              "type": "binary"},
     "max_temp":           {"label": "Maximum intrapartum temperature (°C)",    "type": "numeric"},
-    "prolonged_2nd":      {"label": "Prolonged second stage (0=No, 1=Yes)",    "type": "binary"},
     "prom":               {"label": "PROM (0=No, 1=Yes)",                      "type": "binary"},
     "meconium":           {"label": "Meconium-stained fluid (0=No, 1=Yes)",    "type": "binary"},
 }
