@@ -14,7 +14,7 @@ from utils import inject_theme
 inject_theme()
 
 st.title("VBAC Prediction — Machine Learning Platform")
-st.markdown("**Global Validation Initiative | Lis Maternity Hospital, Tel Aviv Sourasky Medical Center**")
+st.markdown("**From Patient-Level to Center-Level Personalization | Lis Maternity Hospital, Tel Aviv Sourasky Medical Center**")
 
 st.markdown("---")
 

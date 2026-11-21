@@ -185,7 +185,7 @@ def inject_theme():
 html, body, [class*="css"], .stMarkdown, p, li, label { font-family:'Public Sans', system-ui, -apple-system, sans-serif; }
 h1, h2, h3, h4 { font-family:'EB Garamond', Georgia, serif !important; color:#0e4d54 !important; letter-spacing:.2px; }
 h1 { font-weight:600 !important; }
-section[data-testid="stSidebar"] { background:#f6ded7; border-right:1px solid #e9cfc7; }
+section[data-testid="stSidebar"] { background:#e3edec; border-right:1px solid #cadedc; }
 section[data-testid="stSidebar"] * { color:#16262a; }
 section[data-testid="stSidebar"] a { color:#0e4d54 !important; font-weight:600; }
 div[data-testid="stMetricValue"] { color:#0e4d54; font-family:'EB Garamond', serif; }
