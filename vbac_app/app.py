@@ -10,6 +10,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+from utils import inject_theme
+inject_theme()
+
 st.title("VBAC Prediction — Machine Learning Platform")
 st.markdown("**Global Validation Initiative | Lis Maternity Hospital, Tel Aviv Sourasky Medical Center**")
 

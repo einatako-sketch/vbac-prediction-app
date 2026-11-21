@@ -6,9 +6,10 @@ import pandas as pd
 import numpy as np
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from utils import ANTENATAL_VARS, INTRAPARTUM_VARS, derive_prev_vaginal
+from utils import ANTENATAL_VARS, INTRAPARTUM_VARS, derive_prev_vaginal, inject_theme
 
 st.set_page_config(page_title="Upload & Map", page_icon="📂", layout="wide")
+inject_theme()
 st.title("Step 1 — Upload Data & Map Columns")
 
 st.markdown("""

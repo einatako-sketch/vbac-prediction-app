@@ -173,3 +173,26 @@ def compute_grobman(df_ant, y):
     if valid.sum() < 10:
         return None
     return roc_auc_score(y[valid], prob[valid])
+
+
+def inject_theme():
+    """Apply the VBAC visual identity (teal / coral, EB Garamond headings).
+    Call once at the top of every page, right after st.set_page_config."""
+    import streamlit as st
+    st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Public+Sans:wght@400;600;700&display=swap');
+html, body, [class*="css"], .stMarkdown, p, li, label { font-family:'Public Sans', system-ui, -apple-system, sans-serif; }
+h1, h2, h3, h4 { font-family:'EB Garamond', Georgia, serif !important; color:#0e4d54 !important; letter-spacing:.2px; }
+h1 { font-weight:600 !important; }
+section[data-testid="stSidebar"] { background:#f6ded7; border-right:1px solid #e9cfc7; }
+section[data-testid="stSidebar"] * { color:#16262a; }
+section[data-testid="stSidebar"] a { color:#0e4d54 !important; font-weight:600; }
+div[data-testid="stMetricValue"] { color:#0e4d54; font-family:'EB Garamond', serif; }
+.stButton>button { background:#0e7c86; color:#fff; border:0; border-radius:9px; font-weight:700; padding:.5rem 1.3rem; }
+.stButton>button:hover { background:#0e4d54; color:#fff; }
+.stProgress > div > div > div { background:#0e7c86; }
+hr { border:none; border-top:1px solid #dce7e7; }
+a { color:#0e7c86; }
+</style>
+""", unsafe_allow_html=True)

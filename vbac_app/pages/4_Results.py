@@ -9,9 +9,10 @@ import matplotlib.gridspec as gridspec
 from sklearn.metrics import roc_curve
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from utils import ANTENATAL_VARS, INTRAPARTUM_VARS
+from utils import ANTENATAL_VARS, INTRAPARTUM_VARS, inject_theme
 
 st.set_page_config(page_title="Results", page_icon="📈", layout="wide")
+inject_theme()
 st.title("Step 4 — Results & Visualization")
 
 if not st.session_state.get("training_done"):

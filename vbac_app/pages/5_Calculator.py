@@ -7,9 +7,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from utils import ANTENATAL_VARS, INTRAPARTUM_VARS, CS_INDICATION_LABELS, START_MODE_LABELS
+from utils import ANTENATAL_VARS, INTRAPARTUM_VARS, CS_INDICATION_LABELS, START_MODE_LABELS, inject_theme
 
 st.set_page_config(page_title="VBAC Calculator", page_icon="🧮", layout="wide")
+inject_theme()
 st.title("Step 5 — Individual Patient VBAC Calculator")
 
 st.markdown("""

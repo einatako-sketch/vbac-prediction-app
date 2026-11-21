@@ -7,9 +7,10 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from utils import train_and_evaluate, ANTENATAL_VARS, INTRAPARTUM_VARS
+from utils import train_and_evaluate, ANTENATAL_VARS, INTRAPARTUM_VARS, inject_theme
 
 st.set_page_config(page_title="Train Models", page_icon="🤖", layout="wide")
+inject_theme()
 st.title("Step 3 — Train Machine Learning Models")
 
 if not st.session_state.get("mapping_done"):
