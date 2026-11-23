@@ -33,7 +33,7 @@ available_models = list(results.keys())
 selected_model = st.selectbox(
     "Choose model and algorithm",
     available_models,
-    format_func=lambda k: f"Model {k.split('_', 1)[0]} ({['Antenatal only', 'Antenatal + Intrapartum'][k.startswith('B')]}) — {k.split('_', 1)[1]}"
+    format_func=lambda k: f"Model {k.split('_', 1)[0]} ({['Antenatal only', 'Antenatal + Admission'][k.startswith('B')]}) — {k.split('_', 1)[1]}"
 )
 
 model_letter = selected_model.split("_")[0]
@@ -89,9 +89,9 @@ for var, meta in ANTENATAL_VARS.items():
             sel = st.selectbox(meta["label"], list(options.keys()), key=f"calc_{var}")
             patient_data[var] = options[sel]
 
-# Intrapartum inputs (Model B only)
+# Admission exam inputs (Model B only)
 if is_model_B:
-    st.markdown("#### Intrapartum Variables")
+    st.markdown("#### Admission Cervical Exam")
     col1, col2, col3 = st.columns(3)
     inp_cols = [col1, col2, col3]
     col_idx = 0

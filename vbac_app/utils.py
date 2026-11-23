@@ -28,13 +28,12 @@ ANTENATAL_VARS = {
     "prev_vaginal_cs":  {"label": "Prior vaginal delivery before index CD",    "type": "numeric"},
 }
 
+# Admission cervical exam — Model B adds these three to the antenatal set.
+# (Kept under the name INTRAPARTUM_VARS so the rest of the app needs no rewiring.)
 INTRAPARTUM_VARS = {
-    "dilation_admission": {"label": "Cervical dilation on admission (cm)",     "type": "numeric"},
-    "epidural":           {"label": "Epidural analgesia (0=No, 1=Yes)",        "type": "binary"},
-    "oxytocin":           {"label": "Oxytocin use (0=No, 1=Yes)",              "type": "binary"},
-    "max_temp":           {"label": "Maximum intrapartum temperature (°C)",    "type": "numeric"},
-    "prom":               {"label": "PROM (0=No, 1=Yes)",                      "type": "binary"},
-    "meconium":           {"label": "Meconium-stained fluid (0=No, 1=Yes)",    "type": "binary"},
+    "dilation_admission":   {"label": "Cervical dilation on admission (cm)",     "type": "numeric"},
+    "effacement_admission": {"label": "Cervical effacement on admission (%)",    "type": "numeric"},
+    "station_admission":    {"label": "Fetal station on admission (-3 to +3)",   "type": "numeric"},
 }
 
 CS_INDICATION_LABELS = {

@@ -73,7 +73,7 @@ fig, axes = plt.subplots(1, ncols, figsize=(7 * ncols, 6))
 if ncols == 1:
     axes = [axes]
 
-for ax, (title, keys) in zip(axes, [("Model A — Antenatal", model_A_keys), ("Model B — Antenatal + Intrapartum", model_B_keys)]):
+for ax, (title, keys) in zip(axes, [("Model A — Antenatal", model_A_keys), ("Model B — Antenatal + Admission", model_B_keys)]):
     if not keys:
         continue
     for key in keys:

@@ -31,7 +31,7 @@ with col1:
     3. **Explore** the data with descriptive statistics
     4. **Train** two machine learning models:
        - **Model A** — Antenatal features only (available before labor)
-       - **Model B** — Antenatal + Intrapartum features (available during labor)
+       - **Model B** — Antenatal + Admission cervical exam (available at admission)
     5. **Evaluate** model performance (AUC, sensitivity, specificity, PPV, NPV)
     6. **Calculate** individual patient VBAC probability
 
@@ -70,7 +70,7 @@ with col2:
     | Repeat CS | 11.5% |
     | Study period | 2015–2024 |
     | Antenatal features | 12 |
-    | Intrapartum features | 7 |
+    | Admission exam features | 3 |
 
     ---
 

@@ -128,7 +128,7 @@ else:
 st.markdown("---")
 
 # ── Intrapartum variables ──────────────────────────────────────────────────────
-st.markdown("### Intrapartum Variables (Model B only)")
+st.markdown("### Admission Cervical Exam (Model B only)")
 
 intrapartum_map = {}
 for var, meta in INTRAPARTUM_VARS.items():
